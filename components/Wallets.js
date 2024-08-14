@@ -301,6 +301,7 @@ const Wallets = () => {
             bordered
             margin={8}
             key={index}
+            padding={5}
             width={150}
             borderRadius={10}
             borderWidth={2}
@@ -343,12 +344,13 @@ const Wallets = () => {
         size="$2"
         bordered
         margin={8}
+        padding={5}
         width={150}
         borderRadius={10}
         borderWidth={2}
         borderColor={colors.lightText}
         onPress={handleAdd}
-        height={100}
+        height={120}
       >
         <Card.Header borderRadius={10} padded>
           <H4 color={colors.lightText}>Add a wallet</H4>

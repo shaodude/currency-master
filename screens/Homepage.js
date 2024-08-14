@@ -31,8 +31,9 @@ const HomeScreen = () => {
   const nextUpdateUnix = useSelector((state) => state.rates.timeNextUpdate);
   const lastUpdatedDate = dayjs.unix(lastUpdatedUnix);
   const nextUpdateDate = dayjs.unix(nextUpdateUnix);
+  const today = dayjs();
   const lastUpdatedFormatted = lastUpdatedDate.format("MMM D, YYYY h:mm A");
-  const nextUpdateDateHours = nextUpdateDate.diff(lastUpdatedDate, "hour");
+  const nextUpdateDateHours = nextUpdateDate.diff(today, "hour");
   const [disableRefresh, setDisableRefresh] = useState(false);
 
   useEffect(() => {
