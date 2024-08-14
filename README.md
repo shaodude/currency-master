@@ -1,4 +1,4 @@
-Features
+#### Features
 1) Allow users to set preferred base currency and get rates for favorited currency codes
 2) Daily currency data from Exchange Rate API, fallback data in place to handle errant connection scenarios
 3) Refresh button to fetch data from API, with active counter till next update
