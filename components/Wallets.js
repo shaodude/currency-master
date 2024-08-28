@@ -1,6 +1,6 @@
 import { Text, StyleSheet, Dimensions, ScrollView } from "react-native";
 import { colors } from "../styles";
-import { XStack, Card, H3, H4, Button, Input, YStack } from "tamagui";
+import { XStack, Card, H4, Button, Input, YStack } from "tamagui";
 import { useDispatch, useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import Modal from "react-native-modal";
@@ -8,6 +8,7 @@ import { useState } from "react";
 import { updateWalletData, setWallet } from "../redux/walletSlice";
 import { SelectList } from "react-native-dropdown-select-list";
 import Toast from "react-native-toast-message";
+import WalletItem from "./WalletItem";
 
 const Wallets = () => {
   const dispatch = useDispatch();
@@ -45,19 +46,12 @@ const Wallets = () => {
   };
   const EditModal = () => {
     const [newAmount, setNewAmount] = useState("");
+    const [error, setError] = useState(false);
 
     const handleSave = () => {
       if (!validateAmount(newAmount)) {
         setNewAmount("");
-        Toast.show({
-          type: "error",
-          text1: "Amount must be a valid positive number!",
-          text2: "Click to dismiss",
-          visibilityTime: 3000,
-          autoHide: true,
-          position: "top",
-          onPress: () => Toast.hide(),
-        });
+        setError(true);
         return;
       }
       let updatedWalletData;
@@ -80,6 +74,15 @@ const Wallets = () => {
       dispatch(setWallet(updatedWalletData));
       dispatch(updateWalletData());
       toggleEditModal();
+      Toast.show({
+        type: "success",
+        text1: "Wallet updated!",
+        text2: "Click to dismiss",
+        visibilityTime: 3000,
+        autoHide: true,
+        position: "bottom",
+        onPress: () => Toast.hide(),
+      });
     };
 
     const handleCancel = () => {
@@ -112,10 +115,16 @@ const Wallets = () => {
             <Text style={styles.modalText}>New Amount</Text>
             <Input
               onChangeText={(val) => setNewAmount(val)}
+              onChange={() => setError(false)}
               value={newAmount}
               style={styles.inputText}
               size="$5"
             />
+            {error && (
+              <Text style={{ color: "red" }}>
+                Amount must be a valid positive number!
+              </Text>
+            )}
           </YStack>
 
           <XStack gap={80} marginTop={15}>
@@ -135,7 +144,6 @@ const Wallets = () => {
             </Button>
           </XStack>
         </YStack>
-        <Toast />
       </Modal>
     );
   };
@@ -143,6 +151,8 @@ const Wallets = () => {
   const AddModal = () => {
     const [amount, setAmount] = useState("");
     const [selected, setSelected] = useState("");
+    const [currError, setCurrError] = useState(false);
+    const [amountError, setAmountError] = useState(false);
     const ratesList = useSelector((state) => state.rates.ratesList);
     const existingWallets = walletData.map((item) => item.code);
     const data = ratesList.map((currency, index) => ({
@@ -152,28 +162,12 @@ const Wallets = () => {
     }));
     const handleSave = () => {
       if (selected == "") {
-        Toast.show({
-          type: "error",
-          text1: "Please select a currency!",
-          text2: "Click to dismiss",
-          visibilityTime: 3000,
-          autoHide: true,
-          position: "top",
-          onPress: () => Toast.hide(),
-        });
+        setCurrError(true);
         return;
       }
       if (!validateAmount(amount)) {
         setAmount("");
-        Toast.show({
-          type: "error",
-          text1: "Amount must be a valid positive number!",
-          text2: "Click to dismiss",
-          visibilityTime: 3000,
-          autoHide: true,
-          position: "top",
-          onPress: () => Toast.hide(),
-        });
+        setAmountError(true);
         return;
       }
       const amountFormatted = parseFloat(amount);
@@ -206,10 +200,14 @@ const Wallets = () => {
       >
         <YStack gap={15} style={styles.modal}>
           <YStack zIndex={999} alignItems="center" gap={5}>
+            {currError && (
+              <Text style={{ color: "red" }}>Currency must be selected!</Text>
+            )}
             <Text style={styles.modalText}>Currency</Text>
 
             <SelectList
               setSelected={(val) => setSelected(val)}
+              onSelect={() => setCurrError(false)}
               data={data}
               save="value"
               maxHeight={180}
@@ -264,10 +262,16 @@ const Wallets = () => {
             <Text style={styles.modalText}>Amount</Text>
             <Input
               onChangeText={(val) => setAmount(val)}
+              onChange={() => setAmountError(false)}
               value={amount}
               style={styles.inputText}
               size="$5"
             />
+            {amountError && (
+              <Text style={{ color: "red" }}>
+                Amount must be a valid positive number!
+              </Text>
+            )}
           </YStack>
 
           <XStack gap={80} marginTop={15}>
@@ -291,54 +295,8 @@ const Wallets = () => {
     );
   };
 
-  return (
-    <ScrollView contentContainerStyle={styles.wrapper}>
-      {walletData.length > 0 ? (
-        walletData.map((wallet, index) => (
-          <Card
-            elevate
-            size="$2"
-            bordered
-            margin={8}
-            key={index}
-            padding={5}
-            width={150}
-            borderRadius={10}
-            borderWidth={2}
-            borderColor={colors.lightText}
-          >
-            <Card.Header borderRadius={10} padded>
-              <H3 color={colors.lightText}>{wallet.code}</H3>
-              <H4 color={colors.lightText}>{wallet.amount}</H4>
-            </Card.Header>
-            <Card.Footer paddingBottom={10} paddingRight={10}>
-              <XStack flex={1} />
-              <Button
-                variant="outlined"
-                backgroundColor={colors.darkBackground}
-                color={colors.lightText}
-                borderRadius="$5"
-                onPress={() => handleEdit(index)}
-              >
-                Edit
-              </Button>
-            </Card.Footer>
-            <Card.Background
-              borderRadius={10}
-              backgroundColor={colors.darkBackground}
-            />
-          </Card>
-        ))
-      ) : (
-        <Text
-          style={[
-            styles.smallerHeaderText,
-            { width: "100%", textAlign: "flex-start", padding: 10 },
-          ]}
-        >
-          No Wallets found!
-        </Text>
-      )}
+  const AddWallet = ({onPress}) => {
+    return (
       <Card
         elevate
         size="$2"
@@ -349,7 +307,7 @@ const Wallets = () => {
         borderRadius={10}
         borderWidth={2}
         borderColor={colors.lightText}
-        onPress={handleAdd}
+        onPress={onPress}
         height={120}
       >
         <Card.Header borderRadius={10} padded>
@@ -364,6 +322,32 @@ const Wallets = () => {
           backgroundColor={colors.darkBackground}
         />
       </Card>
+    );
+  };
+
+  return (
+    <ScrollView contentContainerStyle={styles.wrapper}>
+      {walletData.length > 0 ? (
+        walletData.map((wallet, index) => (
+          <WalletItem
+            key={index}
+            onPress={() => handleEdit(index)}
+            wallet={wallet}
+          />
+        ))
+      ) : (
+        <Text
+          style={[
+            styles.smallerHeaderText,
+            { width: "100%", textAlign: "flex-start", padding: 10 },
+          ]}
+        >
+          No Wallets found!
+        </Text>
+      )}
+      <AddWallet 
+        onPress={()=>handleAdd()}
+      />
       <EditModal />
       <AddModal />
     </ScrollView>

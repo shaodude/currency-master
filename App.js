@@ -1,4 +1,4 @@
-import { StyleSheet, StatusBar } from "react-native";
+import { StatusBar } from "react-native";
 import { Provider } from "react-redux";
 import { useEffect } from "react";
 import store from "./redux/store";
@@ -50,11 +50,3 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

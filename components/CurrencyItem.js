@@ -1,10 +1,12 @@
-import { Text, StyleSheet, Dimensions, View } from "react-native";
+import { Text, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import { colors } from "../styles";
-import { XStack } from "tamagui";
 
-const CurrencyItem = ({ pair }) => {
+const CurrencyItem = ({ pair, onPress }) => {
+  const code = pair.code || "Invalid Code";
+  const rate = parseFloat(pair.rate) ? pair.rate : "Rate Error";
   return (
-    <View
+    <TouchableOpacity
+    onPress={onPress}
       style={{
         flexDirection: "row",
         justifyContent: "space-between",
@@ -14,9 +16,9 @@ const CurrencyItem = ({ pair }) => {
         paddingVertical: 15,
       }}
     >
-      <Text style={styles.smallHeaderText}>{pair.code}</Text>
-      <Text style={styles.smallHeaderText}>{pair.rate}</Text>
-    </View>
+      <Text style={styles.smallHeaderText}>{code}</Text>
+      <Text style={styles.smallHeaderText}>{rate}</Text>
+    </TouchableOpacity>
   );
 };
 const windowsWidth = Dimensions.get("window").width / 4;

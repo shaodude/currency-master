@@ -105,7 +105,7 @@ const BaseCurrency = () => {
           onPress={handleSave}
           style={{
             paddingHorizontal: 15,
-            paddingVertical: 5,
+            paddingVertical: 7,
             flexDirection: "row",
             alignItems: "center",
             borderWidth: 2,
@@ -117,7 +117,7 @@ const BaseCurrency = () => {
           <Text style={styles.smallHeaderText}>Save</Text>
           <Ionicons
             name="checkmark-circle-outline"
-            size={30}
+            size={26}
             color={colors.lightText}
           />
         </TouchableOpacity>

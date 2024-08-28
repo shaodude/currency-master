@@ -1,4 +1,4 @@
-import axios from 'axios'; // Correct import for Axios
+import axios from 'axios'; 
 
 const baseURL = "https://open.er-api.com/v6/latest";
 
