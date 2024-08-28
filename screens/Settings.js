@@ -11,7 +11,7 @@ const SettingsScreen = () => {
       <SafeAreaView edges={["bottom"]} style={styles.safeArea} />
       <YStack
         flex={1}
-        gap="25"
+        gap={25}
         alignSelf="center"
         alignItems="center"
         style={{ marginTop: 20, width: "80%" }}

@@ -1,4 +1,4 @@
-import { Text, StyleSheet, Dimensions, ScrollView } from "react-native";
+import { Text, StyleSheet, Dimensions, View } from "react-native";
 import { colors } from "../styles";
 import { XStack, YStack, Button } from "tamagui";
 import CurrencyItem from "./CurrencyItem";
@@ -36,8 +36,15 @@ const CurrencyList = () => {
           <CurrencyConverter pair={selectedCurrency} base={baseCurrency} />
 
           <XStack gap={80} marginTop={15}>
-            <Button onPress={() => toggleConverter()} style={{fontFamily:"FinlandicBold",    fontSize: windowsWidth * 0.14,
- }}>Close</Button>
+            <Button
+              onPress={() => toggleConverter()}
+              style={{
+                fontFamily: "FinlandicBold",
+                fontSize: windowsWidth * 0.14,
+              }}
+            >
+              Close
+            </Button>
           </XStack>
         </YStack>
       </Modal>
@@ -53,7 +60,7 @@ const CurrencyList = () => {
     }
   }, [favouriteCodes, ratesList]);
   return (
-    <ScrollView maxHeight={330} style={{ padding: 8, width: "100%" }}>
+    <View style={{ padding: 8, width: "100%" }}>
       <XStack justifyContent="space-between">
         <Text style={styles.smallHeaderText}>code</Text>
         <Text style={styles.smallHeaderText}>rates</Text>
@@ -70,7 +77,7 @@ const CurrencyList = () => {
         <Text>No Currencies in watchlist!</Text>
       )}
       <ConverterModal />
-    </ScrollView>
+    </View>
   );
 };
 const windowsWidth = Dimensions.get("window").width / 4;

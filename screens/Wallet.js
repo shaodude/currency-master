@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Platform, Dimensions } from "react-native";
 import { colors } from "../styles";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { XStack, YStack } from "tamagui";
+import { ScrollView, XStack, YStack } from "tamagui";
 import { fetchWalletData } from "../redux/walletSlice";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -15,21 +15,26 @@ const WalletScreen = () => {
   }, [dispatch]);
 
   return (
-    <View style={styles.wrapper}>
+    <ScrollView nestedScrollEnabled={true} style={styles.wrapper}>
       <SafeAreaView edges={["bottom"]} style={styles.safeArea} />
+      <>
       <YStack
         flex={1}
-        gap="25"
+        gap={25}
         alignSelf="center"
         alignItems="center"
         style={{ marginTop: 20, width: "80%" }}
+        marginBottom={40}
       >
         <XStack>
           <Text style={styles.headerText}>My Wallets</Text>
         </XStack>
+        <XStack>
         <Wallets />
+        </XStack>
       </YStack>
-    </View>
+      </>
+    </ScrollView>
   );
 };
 

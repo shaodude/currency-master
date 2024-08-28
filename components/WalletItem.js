@@ -1,4 +1,5 @@
 import { XStack, Card, H3, H4, Button } from "tamagui";
+import { StyleSheet, Dimensions } from "react-native";
 import { colors } from "../styles";
 
 const WalletItem = ({ wallet, onPress }) => {
@@ -9,7 +10,7 @@ const WalletItem = ({ wallet, onPress }) => {
       bordered
       margin={8}
       padding={5}
-      width={150}
+      style={styles.dynWidth}
       borderRadius={10}
       borderWidth={2}
       borderColor={colors.lightText}
@@ -37,5 +38,13 @@ const WalletItem = ({ wallet, onPress }) => {
     </Card>
   );
 };
+
+const windowsWidth = Dimensions.get("window").width / 4;
+
+const styles = StyleSheet.create({
+  dynWidth: {
+    width: windowsWidth * 1.3,
+  },
+});
 
 export default WalletItem;

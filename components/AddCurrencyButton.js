@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions, TouchableOpacity } from "react-native";
+import { StyleSheet, Dimensions, TouchableOpacity, ScrollView } from "react-native";
 import { colors } from "../styles";
 import { XStack } from "tamagui";
 import { Ionicons } from "@expo/vector-icons";
@@ -51,7 +51,7 @@ const AddCurrencyButton = () => {
       style={{ width: "95%" }}
       justifyContent="flex-start"
       alignItems="flex-start"
-      gap="15"
+      gap={15}
     >
       <SelectList
         setSelected={(val) => setSelected(val)}
@@ -108,6 +108,7 @@ const AddCurrencyButton = () => {
       >
         <Ionicons name="add-outline" size={40} color={colors.lightText} />
       </TouchableOpacity>
+      
     </XStack>
   );
 };

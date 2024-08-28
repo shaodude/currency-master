@@ -67,7 +67,7 @@ const CurrencyConverter = ({ pair, base }) => {
               color: colors.lightText,
               fontSize: 25,
               textAlign: "center",
-              width: 45,
+              width: 55,
             }}
           >
             ↑↓

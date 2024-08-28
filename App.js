@@ -16,19 +16,22 @@ import { PortalProvider } from "@tamagui/portal";
 ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
 
 export default function App() {
-  const [loaded] = useFonts({
+  const [loaded, error] = useFonts({
     FinlandicBoldItalic: require("./assets/fonts/Finlandica-BoldItalic.ttf"),
     FinlandicBold: require("./assets/fonts/Finlandica-Bold.ttf"),
     FinlandicSemiBoldItalic: require("./assets/fonts/Finlandica-SemiBoldItalic.ttf"),
     FinlandicSemiBold: require("./assets/fonts/Finlandica-SemiBold.ttf"),
     FinlandicMedium: require("./assets/fonts/Finlandica-Medium.ttf"),
+    Inter: require("./assets/fonts/Inter_18pt-Regular.ttf"),
+    InterBold: require("./assets/fonts/Inter_18pt-Bold.ttf")
   });
 
+
   useEffect(() => {
-    if (loaded) {
+    if (loaded || error) {
       SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [loaded, error]);
 
   if (!loaded) {
     return null;

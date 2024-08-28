@@ -1,4 +1,4 @@
-import { Text, StyleSheet, Dimensions, ScrollView } from "react-native";
+import { Text, StyleSheet, Dimensions, View } from "react-native";
 import { colors } from "../styles";
 import { XStack, Card, H4, Button, Input, YStack } from "tamagui";
 import { useDispatch, useSelector } from "react-redux";
@@ -119,6 +119,7 @@ const Wallets = () => {
               value={newAmount}
               style={styles.inputText}
               size="$5"
+              keyboardType="numeric"
             />
             {error && (
               <Text style={{ color: "red" }}>
@@ -204,7 +205,6 @@ const Wallets = () => {
               <Text style={{ color: "red" }}>Currency must be selected!</Text>
             )}
             <Text style={styles.modalText}>Currency</Text>
-
             <SelectList
               setSelected={(val) => setSelected(val)}
               onSelect={() => setCurrError(false)}
@@ -230,6 +230,7 @@ const Wallets = () => {
                 width: 150,
                 position: "absolute",
                 top: 50,
+                zIndex: 1999
               }}
               dropdownTextStyles={{
                 fontSize: windowsWidth * 0.16,
@@ -261,6 +262,7 @@ const Wallets = () => {
           <YStack alignItems="center" justifyContent="center" gap={5}>
             <Text style={styles.modalText}>Amount</Text>
             <Input
+              keyboardType="numeric"
               onChangeText={(val) => setAmount(val)}
               onChange={() => setAmountError(false)}
               value={amount}
@@ -295,7 +297,7 @@ const Wallets = () => {
     );
   };
 
-  const AddWallet = ({onPress}) => {
+  const AddWallet = ({ onPress }) => {
     return (
       <Card
         elevate
@@ -303,12 +305,11 @@ const Wallets = () => {
         bordered
         margin={8}
         padding={5}
-        width={150}
+        style={styles.dynWidth}
         borderRadius={10}
         borderWidth={2}
         borderColor={colors.lightText}
         onPress={onPress}
-        height={120}
       >
         <Card.Header borderRadius={10} padded>
           <H4 color={colors.lightText}>Add a wallet</H4>
@@ -326,7 +327,9 @@ const Wallets = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.wrapper}>
+    <View
+   style={styles.wrapper}
+    >
       {walletData.length > 0 ? (
         walletData.map((wallet, index) => (
           <WalletItem
@@ -345,12 +348,10 @@ const Wallets = () => {
           No Wallets found!
         </Text>
       )}
-      <AddWallet 
-        onPress={()=>handleAdd()}
-      />
+      <AddWallet onPress={() => handleAdd()} />
       <EditModal />
       <AddModal />
-    </ScrollView>
+    </View>
   );
 };
 const windowsWidth = Dimensions.get("window").width / 4;
@@ -359,7 +360,7 @@ const styles = StyleSheet.create({
   wrapper: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "flex-start",
+    justifyContent: "center",
   },
   headerText: {
     fontFamily: "FinlandicBold",
@@ -410,6 +411,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: colors.darkBackground,
     paddingVertical: 50,
+  },
+  dynWidth: {
+    width: windowsWidth * 1.3,
   },
 });
 

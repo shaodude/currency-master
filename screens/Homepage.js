@@ -75,7 +75,7 @@ const HomeScreen = () => {
   const UpdateBox = () => {
     return (
       <YStack>
-        <YStack alignItems="center" gap="10">
+        <YStack alignItems="center" gap={10}>
           <Text style={styles.smallerHeaderText}>
             Last Updated at {lastUpdatedFormatted}
           </Text>
@@ -106,13 +106,13 @@ const HomeScreen = () => {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <SafeAreaView edges={["bottom"]} style={styles.safeArea} />
-        <YStack>
-          <PageHeader />
-        </YStack>
-        <ScrollView>
+        <ScrollView nestedScrollEnabled={true}>
+          <YStack>
+            <PageHeader />
+          </YStack>
           <YStack
             flex={1}
-            gap="25"
+            gap={25}
             alignSelf="center"
             alignItems="center"
             style={{ marginTop: 20, width: "80%" }}
@@ -130,11 +130,11 @@ const HomeScreen = () => {
               <UpdateBox />
             </YStack>
 
-            <YStack marginTop={50}>
+            <YStack marginTop={40} paddingBottom={50}>
               <AttributionLink />
             </YStack>
           </YStack>
-        </ScrollView>
+          </ScrollView>
       </KeyboardAvoidingView>
     </View>
   );
