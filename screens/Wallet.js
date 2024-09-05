@@ -2,39 +2,31 @@ import { StyleSheet, Text, View, Platform, Dimensions } from "react-native";
 import { colors } from "../styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView, XStack, YStack } from "tamagui";
-import { fetchWalletData } from "../redux/walletSlice";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import Wallets from "../components/Wallets";
 
 const WalletScreen = () => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchWalletData());
-  }, [dispatch]);
-
   return (
-    <ScrollView nestedScrollEnabled={true} style={styles.wrapper}>
+    <View style={styles.wrapper}>
       <SafeAreaView edges={["bottom"]} style={styles.safeArea} />
-      <>
-      <YStack
-        flex={1}
-        gap={25}
-        alignSelf="center"
-        alignItems="center"
-        style={{ marginTop: 20, width: "80%" }}
-        marginBottom={40}
-      >
-        <XStack>
-          <Text style={styles.headerText}>My Wallets</Text>
-        </XStack>
-        <XStack>
-        <Wallets />
-        </XStack>
-      </YStack>
-      </>
-    </ScrollView>
+
+      <ScrollView nestedScrollEnabled={true}>
+        <YStack
+          flex={1}
+          gap={25}
+          alignSelf="center"
+          alignItems="center"
+          style={{ marginTop: 20, width: "80%" }}
+          marginBottom={40}
+        >
+          <XStack>
+            <Text style={styles.headerText}>My Wallets</Text>
+          </XStack>
+          <XStack>
+            <Wallets />
+          </XStack>
+        </YStack>
+      </ScrollView>
+    </View>
   );
 };
 

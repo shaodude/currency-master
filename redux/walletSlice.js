@@ -1,28 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getWalletData, postWalletData } from "../apis/walletAPI";
+import { postWalletData } from "../apis/walletAPI";
 
 const initialWalletState = {
   walletData: [],
   userId: "btXtgk6g8rYXuejbuZaI",
-  status: "Initialised",
+  status: "",
 };
-
-// get user data
-export const fetchWalletData = createAsyncThunk(
-  "wallet/fetchWalletData",
-
-  async (arg, thunkAPI) => {
-    const state = thunkAPI.getState();
-    const userId = state.wallet.userId;
-    try {
-      const response = await getWalletData(userId);
-      return response;
-    } catch (error) {
-      console.error("Error fetching user data");
-    }
-  }
-);
 
 export const updateWalletData = createAsyncThunk(
   "wallet/updateWalletData",
@@ -48,15 +32,25 @@ const walletSlice = createSlice({
     setWallet: (state, action) => {
       state.walletData = action.payload;
     },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(fetchWalletData.fulfilled, (state, action) => {
-      state.walletData = action.payload.wallet;
-      state.status = "success";
-    });
+
+    addToWallet: (state, action) => {
+      state.walletData = [...state.walletData, action.payload];
+    },
+
+    removeFromWallet: (state, action) => {
+      state.walletData = state.walletData.filter(
+        (item) => item.code !== action.payload
+      );
+    },
+
+    editWallet: (state, action) => {
+      state.walletData = state.walletData.map((item) =>
+        item.code === action.payload.code ? { ...item, ...action.payload } : item
+      );
+    },
   },
 });
 
-export const { setWallet } = walletSlice.actions;
+export const { setWallet, addToWallet, removeFromWallet, editWallet } = walletSlice.actions;
 
 export default walletSlice.reducer;

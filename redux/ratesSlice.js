@@ -2,19 +2,43 @@ import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import getCurrencyData from "../apis/currencyAPI";
 import fallbackRatesData from "../fallbackData/fallbackRatesData.json";
+import { getUserData, postUserData } from "../apis/userAPI";
+import { setWallet } from "./walletSlice";
 
 const initialRatesState = {
+  userId: "btXtgk6g8rYXuejbuZaI",
   ratesList: [],
-  baseCurrency: "USD",
-  favouriteCodes: ["USD", "SGD", "EUR", "AED"],
+  baseCurrency: "",
+  favouriteCodes: [],
   timeLastUpdated: null,
   timeNextUpdate: null,
   status: null,
 };
 
 // get user data
+export const fetchUserData = createAsyncThunk(
+  "rates/fetchUserData",
+
+  async (arg, thunkAPI) => {
+    const state = thunkAPI.getState();
+    const userId = state.rates.userId;
+
+    const response = await getUserData(userId);
+    console.log(response);
+
+    if (response != null) {
+      thunkAPI.dispatch(setWallet(response.wallet))
+      return response;
+    } else {
+      console.warn("Error in retrieving data, using last saved data!");
+      return thunkAPI.rejectWithValue(fallbackRatesData);
+    }
+  }
+);
+
+// get rates
 export const fetchRatesData = createAsyncThunk(
-  "rates/getRatesData",
+  "rates/fetchRatesData",
 
   async (arg, thunkAPI) => {
     const state = thunkAPI.getState();
@@ -35,6 +59,25 @@ export const fetchRatesData = createAsyncThunk(
   }
 );
 
+// post user data
+export const updateUserData = createAsyncThunk(
+  "rates/updateUserData",
+
+  async (arg, thunkAPI) => {
+    const state = thunkAPI.getState();
+    const userId = state.rates.userId;
+    const userData = {
+      baseCurrency: state.rates.baseCurrency,
+      favouriteCodes: state.rates.favouriteCodes
+    };
+    try {
+      await postUserData(userId, userData);
+    } catch (error) {
+      console.error("Error updating user data");
+    }
+  }
+);
+
 const ratesSlice = createSlice({
   name: "rates",
   initialState: initialRatesState,
@@ -48,9 +91,18 @@ const ratesSlice = createSlice({
     addFavouriteCode: (state, action) => {
       state.favouriteCodes.push(action.payload);
     },
+    removeFromFavouriteCode: (state, action) => {
+      state.favouriteCodes = state.favouriteCodes.filter(
+        (item) => item !== action.payload
+      );
+    },
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchUserData.fulfilled, (state, action) => {
+        state.baseCurrency = action.payload.baseCurrency;
+        state.favouriteCodes = action.payload.favouriteCodes;
+      })
       .addCase(fetchRatesData.fulfilled, (state, action) => {
         const ratesArray = Object.entries(action.payload.rates).map(
           ([code, rate]) => {
@@ -77,7 +129,7 @@ const ratesSlice = createSlice({
   },
 });
 
-export const { setRates, setBaseCurrency, addFavouriteCode } =
+export const { setRates, setBaseCurrency, addFavouriteCode, removeFromFavouriteCode } =
   ratesSlice.actions;
 
 export default ratesSlice.reducer;

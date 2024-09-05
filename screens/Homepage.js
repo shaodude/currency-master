@@ -13,9 +13,9 @@ import { useEffect, useState } from "react";
 import AttributionLink from "../components/Attribution";
 import { colors } from "../styles";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Button, YStack } from "tamagui";
+import { Button, Spinner, YStack } from "tamagui";
 import { Ionicons } from "@expo/vector-icons";
-import { fetchRatesData } from "../redux/ratesSlice";
+import { fetchRatesData, fetchUserData } from "../redux/ratesSlice";
 import AddCurrencyButton from "../components/AddCurrencyButton";
 import CurrencyList from "../components/CurrencyList";
 import dayjs from "dayjs";
@@ -35,9 +35,25 @@ const HomeScreen = () => {
   const lastUpdatedFormatted = lastUpdatedDate.format("MMM D, YYYY h:mm A");
   const nextUpdateDateHours = nextUpdateDate.diff(today, "hour");
   const [disableRefresh, setDisableRefresh] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
 
+  // fetch user data from Firebase, then fetch rates data from Exchange Rate API
   useEffect(() => {
-    dispatch(fetchRatesData());
+    const fetchData = async () => {
+      try {
+        setShowSpinner(true);
+        // First, fetch user data
+        await dispatch(fetchUserData());
+
+        // Then, fetch rates data after user data is fetched
+        await dispatch(fetchRatesData());
+        setShowSpinner(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
   }, [dispatch, baseCurrency]);
 
   const handleRefresh = () => {
@@ -108,33 +124,39 @@ const HomeScreen = () => {
         <SafeAreaView edges={["bottom"]} style={styles.safeArea} />
         <ScrollView nestedScrollEnabled={true}>
           <YStack>
-            <PageHeader />
-          </YStack>
-          <YStack
-            flex={1}
-            gap={25}
-            alignSelf="center"
-            alignItems="center"
-            style={{ marginTop: 20, width: "80%" }}
-          >
-            <YStack zIndex={999}>
-              <YStack alignItems="center" marginTop={5}>
-                <CurrencyList />
-              </YStack>
-              <YStack marginTop={5}>
-                <AddCurrencyButton />
-              </YStack>
+            <YStack>
+              <PageHeader />
             </YStack>
+            {showSpinner ? (
+              <Spinner size="large" color="$orange10" />
+            ) : (
+              <YStack
+                flex={1}
+                gap={25}
+                alignSelf="center"
+                alignItems="center"
+                style={{ marginTop: 20, width: "80%" }}
+              >
+                <YStack style={Platform.OS === "ios" ? { zIndex: 999 } : {}}>
+                  <YStack alignItems="center" marginTop={5}>
+                    <CurrencyList />
+                  </YStack>
+                  <YStack marginTop={5}>
+                    <AddCurrencyButton />
+                  </YStack>
+                </YStack>
 
-            <YStack alignItems="center">
-              <UpdateBox />
-            </YStack>
+                <YStack alignItems="center">
+                  <UpdateBox />
+                </YStack>
 
-            <YStack marginTop={40} paddingBottom={50}>
-              <AttributionLink />
-            </YStack>
+                <YStack marginTop={40} paddingBottom={50}>
+                  <AttributionLink />
+                </YStack>
+              </YStack>
+            )}
           </YStack>
-          </ScrollView>
+        </ScrollView>
       </KeyboardAvoidingView>
     </View>
   );
@@ -149,12 +171,6 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     padding: Platform.OS === "ios" ? windowsWidth * 0.04 : windowsWidth * 0.18,
-  },
-  container: {
-    flex: 1,
-    alignItems: "center",
-    paddingVertical: windowsWidth * 0.1,
-    paddingHorizontal: windowsWidth * 0.2,
   },
   headerText: {
     fontFamily: "FinlandicBold",

@@ -1,11 +1,11 @@
-import { StyleSheet, Dimensions, TouchableOpacity, ScrollView } from "react-native";
+import { StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import { colors } from "../styles";
 import { XStack } from "tamagui";
 import { Ionicons } from "@expo/vector-icons";
 import { SelectList } from "react-native-dropdown-select-list";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addFavouriteCode } from "../redux/ratesSlice";
+import { addFavouriteCode, updateUserData } from "../redux/ratesSlice";
 import Toast from "react-native-toast-message";
 
 const AddCurrencyButton = () => {
@@ -34,6 +34,7 @@ const AddCurrencyButton = () => {
       return;
     }
     dispatch(addFavouriteCode(selected));
+    dispatch(updateUserData());
     setSelected("");
     setResetKey(resetKey + 1);
     Toast.show({
@@ -47,38 +48,22 @@ const AddCurrencyButton = () => {
     });
   };
   return (
-    <XStack
-      style={{ width: "95%" }}
-      justifyContent="flex-start"
-      alignItems="flex-start"
-      gap={15}
-    >
+    <XStack justifyContent="flex-start" alignItems="flex-start" gap={15}>
       <SelectList
         setSelected={(val) => setSelected(val)}
         data={data}
         save="value"
-        defaultOption={{key: '', value: ''}}
-        key={resetKey} 
+        defaultOption={{ key: "", value: "" }}
+        key={resetKey}
         maxHeight={180}
         placeholder={"Add a Currency"}
         fontFamily={"FinlandicBold"}
-        boxStyles={{
-          backgroundColor: colors.lightText,
-          width: 280,
-          borderColor: colors.darkBackground,
-          borderWidth: 2,
-          alignItems: "center",
-        }}
+        boxStyles={styles.box}
         inputStyles={{
           color: colors.darkBackground,
           fontSize: windowsWidth * 0.14,
         }}
-        dropdownStyles={{
-          width: 280,
-          position: "absolute",
-          top: 50,
-          backgroundColor: colors.darkBackground,
-        }}
+        dropdownStyles={styles.dropdown}
         dropdownTextStyles={{ color: colors.lightText }}
         arrowicon={
           <Ionicons
@@ -108,26 +93,25 @@ const AddCurrencyButton = () => {
       >
         <Ionicons name="add-outline" size={40} color={colors.lightText} />
       </TouchableOpacity>
-      
     </XStack>
   );
 };
 const windowsWidth = Dimensions.get("window").width / 4;
 
 const styles = StyleSheet.create({
-  buttonBox: {
-    padding: 10,
-    borderColor: colors.lightText,
+  box: {
+    backgroundColor: colors.lightText,
+    width: windowsWidth * 2.5,
+    borderColor: colors.darkBackground,
     borderWidth: 2,
-    borderRadius: 5,
-    width: "100%",
+    alignItems: "center",
   },
-  smallHeaderText: {
-    fontFamily: "FinlandicBold",
-    fontSize: windowsWidth * 0.14,
-    color: colors.lightText,
-    textTransform: "uppercase",
-    letterSpacing: 1,
+  dropdown: {
+    zIndex: 999,
+    width: windowsWidth * 2.5,
+    position: "absolute",
+    top: 50,
+    backgroundColor: colors.darkBackground,
   },
 });
 

@@ -15,12 +15,12 @@ const CurrencyConverter = ({ pair, base }) => {
   const [targetCode, setTargetCode] = useState(pair.code);
   const [rate, setRate] = useState(pair.rate);
 
-  // Calculate the computed value based on the current rates and base value
+  // calculate the computed value based on the current rates and base value
   const computed = (parseFloat(rate) * parseFloat(baseValue)).toFixed(2);
 
   const handleSwitch = () => {
-    // Switch base and target currencies
-    setBaseValue("1"); // Reset the base value to 1
+    // switch base and target currencies
+    setBaseValue("1"); // reset the base value to 1
     const newBaseCode = targetCode;
     const newTargetCode = baseCode;
     setBaseCode(newBaseCode);
@@ -34,7 +34,7 @@ const CurrencyConverter = ({ pair, base }) => {
 
   return (
     <View style={{ gap: 15 }}>
-      <View>
+      <View style={{ alignItems: "center", justifyContent: "center" }}>
         <Text style={styles.smallHeaderText}>
           1 {baseCode} = {rate} {targetCode}
         </Text>
@@ -64,10 +64,11 @@ const CurrencyConverter = ({ pair, base }) => {
         >
           <Text
             style={{
-              color: colors.lightText,
+              color: "springgreen",
               fontSize: 25,
               textAlign: "center",
               width: 55,
+              letterSpacing: -5,
             }}
           >
             ↑↓
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   inputText: {
-    width: 120,
+    minWidth: 120,
     fontFamily: "FinlandicMedium",
     fontSize: windowsWidth * 0.18,
     textAlign: "center",
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   disabledinputText: {
-    width: 120,
+    minWidth: 120,
     fontFamily: "FinlandicMedium",
     fontSize: windowsWidth * 0.18,
     textAlign: "center",

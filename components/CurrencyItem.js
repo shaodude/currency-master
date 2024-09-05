@@ -6,7 +6,7 @@ const CurrencyItem = ({ pair, onPress }) => {
   const rate = parseFloat(pair.rate) ? pair.rate : "Rate Error";
   return (
     <TouchableOpacity
-    onPress={onPress}
+      onPress={onPress}
       style={{
         flexDirection: "row",
         justifyContent: "space-between",
@@ -29,11 +29,6 @@ const styles = StyleSheet.create({
     fontSize: windowsWidth * 0.17,
     color: colors.lightText,
     textTransform: "uppercase",
-  },
-  image: {
-    width: 30,
-    height: 20,
-    marginLeft: 10,
   },
 });
 

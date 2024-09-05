@@ -32,7 +32,7 @@ describe("CurrencyConverter Component", () => {
     expect(screen.getByDisplayValue(displayRate)).toBeTruthy();
   });
 
-  test("switches base and target currencies accurately when the switch button is pressed", async () => {
+  test("switches base and target currencies when the switch button is pressed", async () => {
     render(<CurrencyConverter pair={mockValidCurrencyPair} base={mockBase} />);
 
     // fire switch button
@@ -51,7 +51,7 @@ describe("CurrencyConverter Component", () => {
     expect(screen.getByDisplayValue("0.77")).toBeTruthy();
   });
 
-  test("after switch, target currency value is accurately computed", async () => {
+  test("after one switch, target currency value is accurately computed", async () => {
     render(<CurrencyConverter pair={mockValidCurrencyPair} base={mockBase} />);
 
     // fire switch button

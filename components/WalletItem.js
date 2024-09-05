@@ -1,6 +1,7 @@
-import { XStack, Card, H3, H4, Button } from "tamagui";
+import { Card, H3, H4, Button } from "tamagui";
 import { StyleSheet, Dimensions } from "react-native";
 import { colors } from "../styles";
+import { Ionicons } from "@expo/vector-icons";
 
 const WalletItem = ({ wallet, onPress }) => {
   return (
@@ -15,18 +16,29 @@ const WalletItem = ({ wallet, onPress }) => {
       borderWidth={2}
       borderColor={colors.lightText}
     >
-      <Card.Header borderRadius={10} padded>
-        <H3 color={colors.lightText}>{wallet.code}</H3>
-        <H4 color={colors.lightText}>{wallet.amount}</H4>
+      <Card.Header
+        borderRadius={10}
+        padded
+        maxHeight={"$10"}
+        overflow="hidden"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <H3 style={{ textAlign: "center", textDecorationLine: "underline" }} color={colors.lightText}>
+          {wallet.code}
+        </H3>
+        <H4 style={{ textAlign: "center" }} color={colors.lightText}>
+          {wallet.amount}
+        </H4>
       </Card.Header>
-      <Card.Footer paddingBottom={10} paddingRight={10}>
-        <XStack flex={1} />
+      <Card.Footer alignItems="center" justifyContent="center" padding={10}>
         <Button
           variant="outlined"
           backgroundColor={colors.darkBackground}
           color={colors.lightText}
           borderRadius="$5"
           onPress={onPress}
+          iconAfter={<Ionicons name="create-outline" size={22} />}
         >
           Edit
         </Button>

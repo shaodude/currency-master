@@ -1,11 +1,20 @@
-import { Text, StyleSheet, Dimensions, View } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  Dimensions,
+  View,
+  TouchableOpacity,
+} from "react-native";
 import { colors } from "../styles";
 import { XStack, YStack, Button } from "tamagui";
 import CurrencyItem from "./CurrencyItem";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Modal from "react-native-modal";
 import CurrencyConverter from "./CurrencyConverter";
+import { Ionicons } from "@expo/vector-icons";
+import { removeFromFavouriteCode, updateUserData } from "../redux/ratesSlice";
+import Toast from "react-native-toast-message";
 
 const CurrencyList = () => {
   const ratesList = useSelector((state) => state.rates.ratesList);
@@ -15,6 +24,7 @@ const CurrencyList = () => {
   const baseCurrency = useSelector((state) => state.rates.baseCurrency);
   const [selectedCurrency, setSelectedCurrency] = useState({});
 
+  const dispatch = useDispatch();
   const openConverter = (pair) => {
     toggleConverter();
     setSelectedCurrency(pair);
@@ -22,6 +32,21 @@ const CurrencyList = () => {
 
   const toggleConverter = () => {
     setModalVisible(!modalVisible);
+  };
+
+  const handleRemove = () => {
+    dispatch(removeFromFavouriteCode(selectedCurrency.code));
+    dispatch(updateUserData());
+    toggleConverter();
+    Toast.show({
+      type: "success",
+      text1: "Removed from Watchlist!",
+      text2: "Click to dismiss",
+      visibilityTime: 3000,
+      autoHide: true,
+      position: "bottom",
+      onPress: () => Toast.hide(),
+    });
   };
 
   const ConverterModal = () => {
@@ -33,24 +58,38 @@ const CurrencyList = () => {
         style={{ marginBottom: "20%" }}
       >
         <YStack gap={15} style={styles.modal}>
+          <View style={{ position: "absolute", left: 20, top: 20 }}>
+            <TouchableOpacity onPress={() => toggleConverter()}>
+              <Ionicons
+                name="close-circle-outline"
+                size={35}
+                color={colors.lightText}
+              />
+            </TouchableOpacity>
+          </View>
           <CurrencyConverter pair={selectedCurrency} base={baseCurrency} />
 
-          <XStack gap={80} marginTop={15}>
+          <YStack gap={80} marginTop={20}>
             <Button
-              onPress={() => toggleConverter()}
+              onPress={() => handleRemove()}
               style={{
                 fontFamily: "FinlandicBold",
                 fontSize: windowsWidth * 0.14,
+                color: "crimson",
+                backgroundColor: colors.darkBackground,
+                borderColor: "crimson",
+                borderWidth: 2,
               }}
             >
-              Close
+              Remove from Watchlist
             </Button>
-          </XStack>
+          </YStack>
         </YStack>
       </Modal>
     );
   };
 
+  // render rates list with data, everytime favouriteCodes changes
   useEffect(() => {
     if (favouriteCodes && ratesList) {
       const filteredCurrencies = ratesList.filter((rate) =>

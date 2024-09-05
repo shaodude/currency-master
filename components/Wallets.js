@@ -1,11 +1,16 @@
-import { Text, StyleSheet, Dimensions, View } from "react-native";
+import { Text, StyleSheet, Dimensions, View, Platform } from "react-native";
 import { colors } from "../styles";
 import { XStack, Card, H4, Button, Input, YStack } from "tamagui";
 import { useDispatch, useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import Modal from "react-native-modal";
 import { useState } from "react";
-import { updateWalletData, setWallet } from "../redux/walletSlice";
+import {
+  updateWalletData,
+  editWallet,
+  removeFromWallet,
+  addToWallet,
+} from "../redux/walletSlice";
 import { SelectList } from "react-native-dropdown-select-list";
 import Toast from "react-native-toast-message";
 import WalletItem from "./WalletItem";
@@ -44,6 +49,7 @@ const Wallets = () => {
 
     return false;
   };
+
   const EditModal = () => {
     const [newAmount, setNewAmount] = useState("");
     const [error, setError] = useState(false);
@@ -54,24 +60,12 @@ const Wallets = () => {
         setError(true);
         return;
       }
-      let updatedWalletData;
+      const selectedCode = walletData[selectedWallet].code;
       if (newAmount > 0) {
-        updatedWalletData = walletData.map((wallet, index) => {
-          if (index === selectedWallet) {
-            return {
-              ...wallet,
-              amount: parseFloat(newAmount),
-            };
-          }
-          return wallet;
-        });
+        dispatch(editWallet({ amount: newAmount, code: selectedCode }));
       } else {
-        const wallet = [...walletData];
-        wallet.splice(selectedWallet, 1);
-        updatedWalletData = wallet;
+        dispatch(removeFromWallet(selectedCode));
       }
-
-      dispatch(setWallet(updatedWalletData));
       dispatch(updateWalletData());
       toggleEditModal();
       Toast.show({
@@ -112,7 +106,9 @@ const Wallets = () => {
             </Text>
           </YStack>
           <YStack alignItems="center" justifyContent="center" gap={5}>
-            <Text style={styles.modalText}>New Amount</Text>
+            <Text style={styles.modalText}>New Amount </Text>
+            <Text style={styles.modalSmallText}>(Set to 0 to remove wallet)</Text>
+
             <Input
               onChangeText={(val) => setNewAmount(val)}
               onChange={() => setError(false)}
@@ -120,6 +116,7 @@ const Wallets = () => {
               style={styles.inputText}
               size="$5"
               keyboardType="numeric"
+              maxLength={16}
             />
             {error && (
               <Text style={{ color: "red" }}>
@@ -133,6 +130,7 @@ const Wallets = () => {
               style={styles.modalCancelButton}
               color={"crimson"}
               onPress={handleCancel}
+              iconAfter={<Ionicons name="close-circle-outline" size={20} />}
             >
               Cancel
             </Button>
@@ -140,6 +138,7 @@ const Wallets = () => {
               style={styles.modalSaveButton}
               color={"#228B22"}
               onPress={handleSave}
+              iconAfter={<Ionicons name="checkmark-circle-outline" size={20} />}
             >
               Save
             </Button>
@@ -156,10 +155,11 @@ const Wallets = () => {
     const [amountError, setAmountError] = useState(false);
     const ratesList = useSelector((state) => state.rates.ratesList);
     const existingWallets = walletData.map((item) => item.code);
+    // populate dropdown list data
     const data = ratesList.map((currency, index) => ({
       key: String(index + 1),
       value: currency.code,
-      disabled: existingWallets.includes(currency.code),
+      disabled: existingWallets.includes(currency.code), // disable code that are already in wallet
     }));
     const handleSave = () => {
       if (selected == "") {
@@ -172,8 +172,7 @@ const Wallets = () => {
         return;
       }
       const amountFormatted = parseFloat(amount);
-      const newWallet = { code: selected, amount: amountFormatted };
-      dispatch(setWallet([...walletData, newWallet]));
+      dispatch(addToWallet({ code: selected, amount: amountFormatted }))
       dispatch(updateWalletData());
       Toast.show({
         type: "success",
@@ -200,7 +199,11 @@ const Wallets = () => {
         style={{ marginBottom: "20%" }}
       >
         <YStack gap={15} style={styles.modal}>
-          <YStack zIndex={999} alignItems="center" gap={5}>
+          <YStack
+            alignItems="center"
+            gap={5}
+            style={Platform.OS === "ios" ? { zIndex: 999 } : {}}
+          >
             {currError && (
               <Text style={{ color: "red" }}>Currency must be selected!</Text>
             )}
@@ -225,12 +228,12 @@ const Wallets = () => {
                 fontSize: windowsWidth * 0.16,
               }}
               dropdownStyles={{
+                zIndex: 999,
                 backgroundColor: colors.darkBackground,
                 alignSelf: "center",
                 width: 150,
                 position: "absolute",
                 top: 50,
-                zIndex: 1999
               }}
               dropdownTextStyles={{
                 fontSize: windowsWidth * 0.16,
@@ -268,6 +271,8 @@ const Wallets = () => {
               value={amount}
               style={styles.inputText}
               size="$5"
+              maxLength={16}
+              overflow="hidden"
             />
             {amountError && (
               <Text style={{ color: "red" }}>
@@ -281,6 +286,8 @@ const Wallets = () => {
               style={styles.modalCancelButton}
               color={"crimson"}
               onPress={handleCancel}
+              iconAfter={<Ionicons name="close-circle-outline" size={20} />}
+
             >
               Cancel
             </Button>
@@ -288,6 +295,8 @@ const Wallets = () => {
               style={styles.modalSaveButton}
               color={"#228B22"}
               onPress={handleSave}
+              iconAfter={<Ionicons name="checkmark-circle-outline" size={20} />}
+
             >
               Save
             </Button>
@@ -327,9 +336,7 @@ const Wallets = () => {
   };
 
   return (
-    <View
-   style={styles.wrapper}
-    >
+    <View style={styles.wrapper}>
       {walletData.length > 0 ? (
         walletData.map((wallet, index) => (
           <WalletItem
@@ -342,7 +349,7 @@ const Wallets = () => {
         <Text
           style={[
             styles.smallerHeaderText,
-            { width: "100%", textAlign: "flex-start", padding: 10 },
+            { width: "100%", textAlign: "center", padding: 10 },
           ]}
         >
           No Wallets found!
@@ -380,6 +387,12 @@ const styles = StyleSheet.create({
     color: colors.lightText,
     textTransform: "uppercase",
   },
+  modalSmallText: {
+    fontFamily: "FinlandicMedium",
+    fontSize: windowsWidth * 0.11,
+    color: colors.lightText,
+    textTransform: "uppercase",
+  },
   modalNumber: {
     fontFamily: "FinlandicMedium",
     fontSize: windowsWidth * 0.2,
@@ -387,7 +400,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   inputText: {
-    width: 120,
+    minWidth: 120,
     fontFamily: "FinlandicMedium",
     fontSize: windowsWidth * 0.18,
     textAlign: "center",
