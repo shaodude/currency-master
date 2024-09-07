@@ -13,7 +13,7 @@
 
 5. Cloud backup: User data like wallets, watchlisted currencies, and preferred base currency are backed up on Google Firebase and persists between sessions and devices.
 
-## Application Preview (Expo Go Application required )
+## Application Preview (Expo Go Application required)
 The Expo Go Application can be downloaded from think link: https://expo.dev/go.
 
 There is an EAS preview build setup for this project which can be found here:
