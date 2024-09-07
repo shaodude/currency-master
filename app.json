@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "currency-master",
-    "slug": "currency-master",
+    "slug": "currency-master-preview",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,6 +22,18 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c55dd1fc-aad5-45dc-a5d0-f663c58d75f5"
+      }
+    },
+    "owner": "shaodude",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/c55dd1fc-aad5-45dc-a5d0-f663c58d75f5"
     }
   }
 }

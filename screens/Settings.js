@@ -59,7 +59,7 @@ const SettingsScreen = () => {
             onPress={handleSave}
             iconAfter={<Ionicons name="checkmark-circle-outline" size={25} />}
           >
-            Save
+            <Text style={{color: colors.lightText}}>Save</Text>
           </Button>
         </YStack>
       </YStack>

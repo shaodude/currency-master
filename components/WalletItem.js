@@ -1,5 +1,5 @@
 import { Card, H3, H4, Button } from "tamagui";
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Text } from "react-native";
 import { colors } from "../styles";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -40,7 +40,7 @@ const WalletItem = ({ wallet, onPress }) => {
           onPress={onPress}
           iconAfter={<Ionicons name="create-outline" size={22} />}
         >
-          Edit
+          <Text style={{color: colors.lightText}}>Edit</Text>
         </Button>
       </Card.Footer>
       <Card.Background

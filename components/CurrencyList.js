@@ -81,7 +81,7 @@ const CurrencyList = () => {
                 borderWidth: 2,
               }}
             >
-              Remove from Watchlist
+              <Text style={{color: "crimson"}}>Remove from Watchlist</Text>
             </Button>
           </YStack>
         </YStack>

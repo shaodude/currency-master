@@ -132,7 +132,7 @@ const Wallets = () => {
               onPress={handleCancel}
               iconAfter={<Ionicons name="close-circle-outline" size={20} />}
             >
-              Cancel
+               <Text style={{color: "crimson"}}>Cancel</Text>
             </Button>
             <Button
               style={styles.modalSaveButton}
@@ -140,7 +140,7 @@ const Wallets = () => {
               onPress={handleSave}
               iconAfter={<Ionicons name="checkmark-circle-outline" size={20} />}
             >
-              Save
+               <Text style={{color: "#228B22"}}>Save</Text>
             </Button>
           </XStack>
         </YStack>
@@ -289,7 +289,7 @@ const Wallets = () => {
               iconAfter={<Ionicons name="close-circle-outline" size={20} />}
 
             >
-              Cancel
+              <Text style={{color: "crimson"}}>Cancel</Text>
             </Button>
             <Button
               style={styles.modalSaveButton}
@@ -298,7 +298,7 @@ const Wallets = () => {
               iconAfter={<Ionicons name="checkmark-circle-outline" size={20} />}
 
             >
-              Save
+               <Text style={{color: "#228B22"}}>Save</Text>
             </Button>
           </XStack>
         </YStack>

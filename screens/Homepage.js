@@ -44,7 +44,6 @@ const HomeScreen = () => {
         setShowSpinner(true);
         // First, fetch user data
         await dispatch(fetchUserData());
-
         // Then, fetch rates data after user data is fetched
         await dispatch(fetchRatesData());
         setShowSpinner(false);
@@ -102,10 +101,10 @@ const HomeScreen = () => {
             variant="outlined"
             onPress={handleRefresh}
             color={disableRefresh ? "grey" : colors.lightText}
-            icon={<Ionicons name="refresh-outline" size={28} />}
+            icon={<Ionicons name="refresh-outline" size={24} />}
             disabled={disableRefresh}
           >
-            Refresh Now
+             <Text style={{color: colors.lightText}}>Refresh Now</Text>
           </Button>
           {disableRefresh && (
             <Text style={{ color: "grey" }}>Try again in 20 minutes</Text>
