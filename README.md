@@ -18,7 +18,7 @@ There is an EAS preview build setup for this project which can be found here:
 
 (IOS & Android)
 
-https://expo.dev/preview/update?message=Initial%20commit&updateRuntimeVersion=1.0.0&createdAt=2024-09-07T16%3A47%3A37.735Z&slug=exp&projectId=7517d6cf-71e4-4348-9783-2e52a298de5b&group=e29f3cc6-da05-489e-93fa-03ce983ba34f. 
+https://expo.dev/preview/update?message=Fixed%20inconsistences%20for%20EAS%20preview%20build&updateRuntimeVersion=1.0.0&createdAt=2024-09-07T21%3A41%3A20.215Z&slug=exp&projectId=c55dd1fc-aad5-45dc-a5d0-f663c58d75f5&group=7dbb0504-7678-48fb-8256-690ed14950bd.
 
 In the event where the Expo EAS Preview build is unavailable on the Expo server, there is a downloaded APK build always available at:
 
