@@ -20,7 +20,7 @@ There is an EAS preview build setup for this project which can be found here:
 
 (IOS & Android)
 
-https://expo.dev/preview/update?message=fixed%20add%20wallet%20text&updateRuntimeVersion=1.0.0&createdAt=2024-09-08T09%3A17%3A26.765Z&slug=exp&projectId=c55dd1fc-aad5-45dc-a5d0-f663c58d75f5&group=517b7355-bd0c-4d03-91b1-390e45efca03. 
+https://expo.dev/preview/update?message=final%20fixes%20to%20preview%20build%20-%20currency%20master&updateRuntimeVersion=1.0.0&createdAt=2024-09-08T10%3A10%3A32.694Z&slug=exp&projectId=c55dd1fc-aad5-45dc-a5d0-f663c58d75f5&group=ed8bf3e7-e0e9-4b6a-86bb-78e5b9094999. 
 
 In the event where the Expo EAS Preview build is unavailable on the Expo server, there is a downloaded APK build always available at:
 
