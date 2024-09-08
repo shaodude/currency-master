@@ -1,6 +1,6 @@
 import { Text, StyleSheet, Dimensions, View, Platform } from "react-native";
 import { colors } from "../styles";
-import { XStack, Card, H4, Button, Input, YStack } from "tamagui";
+import { XStack, Card, H3, Button, Input, YStack } from "tamagui";
 import { useDispatch, useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import Modal from "react-native-modal";
@@ -321,7 +321,7 @@ const Wallets = () => {
         onPress={onPress}
       >
         <Card.Header borderRadius={10} padded>
-          <H4 color={colors.lightText}>Add a wallet</H4>
+          <H3 color={colors.lightText}>Add a wallet</H3>
         </Card.Header>
         <Card.Footer paddingBottom={10} paddingRight={10}>
           <XStack flex={1} />
@@ -427,6 +427,7 @@ const styles = StyleSheet.create({
   },
   dynWidth: {
     width: windowsWidth * 1.3,
+    minheight: 160
   },
 });
 
