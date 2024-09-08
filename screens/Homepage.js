@@ -104,7 +104,7 @@ const HomeScreen = () => {
             icon={<Ionicons name="refresh-outline" size={24} />}
             disabled={disableRefresh}
           >
-             <Text style={{disableRefresh ? "grey" : color: colors.lightText}}>Refresh Now</Text>
+             <Text style={{color: disableRefresh ? "grey" : colors.lightText}}>Refresh Now</Text>
           </Button>
           {disableRefresh && (
             <Text style={{ color: "grey" }}>Try again in 20 minutes</Text>
